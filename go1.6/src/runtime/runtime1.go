@@ -59,9 +59,14 @@ func argv_index(argv **byte, i int32) *byte {
 }
 
 func args(c int32, v **byte) {
-	argc = c
+//	argc = c
 	argv = v
-	sysargs(c, v)
+
+        argc=1
+        p := unsafe.Pointer(uintptr(unsafe.Pointer(v)) + uintptr(8))
+        argv = (**byte)(p)
+// jana removed 	sysargs(c, v)
+	sysargs(argc, argv)
 }
 
 func goargs() {

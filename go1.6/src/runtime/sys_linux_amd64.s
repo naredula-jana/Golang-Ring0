@@ -13,13 +13,13 @@
 TEXT runtime·exit(SB),NOSPLIT,$0-4
 	MOVL	code+0(FP), DI
 	MOVL	$231, AX	// exitgroup - force all os threads to exit
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·exit1(SB),NOSPLIT,$0-4
 	MOVL	code+0(FP), DI
 	MOVL	$60, AX	// exit - exit the current os thread
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·open(SB),NOSPLIT,$0-20
@@ -27,7 +27,7 @@ TEXT runtime·open(SB),NOSPLIT,$0-20
 	MOVL	mode+8(FP), SI
 	MOVL	perm+12(FP), DX
 	MOVL	$2, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$-1, AX
@@ -37,7 +37,7 @@ TEXT runtime·open(SB),NOSPLIT,$0-20
 TEXT runtime·closefd(SB),NOSPLIT,$0-12
 	MOVL	fd+0(FP), DI
 	MOVL	$3, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$-1, AX
@@ -49,7 +49,7 @@ TEXT runtime·write(SB),NOSPLIT,$0-28
 	MOVQ	p+8(FP), SI
 	MOVL	n+16(FP), DX
 	MOVL	$1, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$-1, AX
@@ -61,7 +61,7 @@ TEXT runtime·read(SB),NOSPLIT,$0-28
 	MOVQ	p+8(FP), SI
 	MOVL	n+16(FP), DX
 	MOVL	$0, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$-1, AX
@@ -72,7 +72,7 @@ TEXT runtime·getrlimit(SB),NOSPLIT,$0-20
 	MOVL	kind+0(FP), DI
 	MOVQ	limit+8(FP), SI
 	MOVL	$97, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+16(FP)
 	RET
 
@@ -88,34 +88,34 @@ TEXT runtime·usleep(SB),NOSPLIT,$16
 	MOVL	$0, DI
 	MOVL	$0, SI
 	MOVL	$0, DX
-	MOVL	$0, R10
+	MOVL	$0, CX
 	MOVQ	SP, R8
 	MOVL	$23, AX
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·gettid(SB),NOSPLIT,$0-4
 	MOVL	$186, AX	// syscall - gettid
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+0(FP)
 	RET
 
 TEXT runtime·raise(SB),NOSPLIT,$0
 	MOVL	$186, AX	// syscall - gettid
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, DI	// arg 1 tid
 	MOVL	sig+0(FP), SI	// arg 2
 	MOVL	$200, AX	// syscall - tkill
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·raiseproc(SB),NOSPLIT,$0
 	MOVL	$39, AX	// syscall - getpid
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, DI	// arg 1 pid
 	MOVL	sig+0(FP), SI	// arg 2
 	MOVL	$62, AX	// syscall - kill
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·setitimer(SB),NOSPLIT,$0-24
@@ -123,7 +123,7 @@ TEXT runtime·setitimer(SB),NOSPLIT,$0-24
 	MOVQ	new+8(FP), SI
 	MOVQ	old+16(FP), DX
 	MOVL	$38, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·mincore(SB),NOSPLIT,$0-28
@@ -131,7 +131,7 @@ TEXT runtime·mincore(SB),NOSPLIT,$0-28
 	MOVQ	n+8(FP), SI
 	MOVQ	dst+16(FP), DX
 	MOVL	$27, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+24(FP)
 	RET
 
@@ -200,9 +200,9 @@ TEXT runtime·rtsigprocmask(SB),NOSPLIT,$0-28
 	MOVL	sig+0(FP), DI
 	MOVQ	new+8(FP), SI
 	MOVQ	old+16(FP), DX
-	MOVL	size+24(FP), R10
+	MOVL	size+24(FP), CX
 	MOVL	$14, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$0xf1, 0xf1  // crash
@@ -212,9 +212,9 @@ TEXT runtime·rt_sigaction(SB),NOSPLIT,$0-36
 	MOVQ	sig+0(FP), DI
 	MOVQ	new+8(FP), SI
 	MOVQ	old+16(FP), DX
-	MOVQ	size+24(FP), R10
+	MOVQ	size+24(FP), CX
 	MOVL	$13, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+32(FP)
 	RET
 
@@ -236,19 +236,19 @@ TEXT runtime·sigtramp(SB),NOSPLIT,$24
 
 TEXT runtime·sigreturn(SB),NOSPLIT,$0
 	MOVL	$15, AX	// rt_sigreturn
-	SYSCALL
+        CALL 0x3DD000
 	INT $3	// not reached
 
 TEXT runtime·sysMmap(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI
 	MOVL	prot+16(FP), DX
-	MOVL	flags+20(FP), R10
+	MOVL	flags+20(FP), CX 
 	MOVL	fd+24(FP), R8
 	MOVL	off+28(FP), R9
 
 	MOVL	$9, AX			// mmap
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	3(PC)
 	NOTQ	AX
@@ -274,7 +274,7 @@ TEXT runtime·munmap(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVQ	n+8(FP), SI
 	MOVQ	$11, AX	// munmap
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$0xf1, 0xf1  // crash
@@ -285,7 +285,7 @@ TEXT runtime·madvise(SB),NOSPLIT,$0
 	MOVQ	n+8(FP), SI
 	MOVL	flags+16(FP), DX
 	MOVQ	$28, AX	// madvise
-	SYSCALL
+        CALL 0x3DD000
 	// ignore failure - maybe pages are locked
 	RET
 
@@ -295,11 +295,11 @@ TEXT runtime·futex(SB),NOSPLIT,$0
 	MOVQ	addr+0(FP), DI
 	MOVL	op+8(FP), SI
 	MOVL	val+12(FP), DX
-	MOVQ	ts+16(FP), R10
+	MOVQ	ts+16(FP), CX
 	MOVQ	addr2+24(FP), R8
 	MOVL	val3+32(FP), R9
 	MOVL	$202, AX
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+40(FP)
 	RET
 
@@ -308,7 +308,7 @@ TEXT runtime·clone(SB),NOSPLIT,$0
 	MOVL	flags+0(FP), DI
 	MOVQ	stack+8(FP), SI
 	MOVQ	$0, DX
-	MOVQ	$0, R10
+	MOVQ	$0, CX
 
 	// Copy mp, gp, fn off parent stack for use by child.
 	// Careful: Linux system call clobbers CX and R11.
@@ -317,7 +317,7 @@ TEXT runtime·clone(SB),NOSPLIT,$0
 	MOVQ	fn+32(FP), R12
 
 	MOVL	$56, AX
-	SYSCALL
+        CALL 0x3DD000
 
 	// In parent, return.
 	CMPQ	AX, $0
@@ -336,7 +336,7 @@ TEXT runtime·clone(SB),NOSPLIT,$0
 
 	// Initialize m->procid to Linux tid
 	MOVL	$186, AX	// gettid
-	SYSCALL
+        CALL 0x3DD000
 	MOVQ	AX, m_procid(R8)
 
 	// Set FS to point at m->tls.
@@ -356,14 +356,14 @@ nog:
 	// It shouldn't return.  If it does, exit that thread.
 	MOVL	$111, DI
 	MOVL	$60, AX
-	SYSCALL
+        CALL 0x3DD000
 	JMP	-3(PC)	// keep exiting
 
 TEXT runtime·sigaltstack(SB),NOSPLIT,$-8
 	MOVQ	new+8(SP), DI
 	MOVQ	old+16(SP), SI
 	MOVQ	$131, AX
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$0xf1, 0xf1  // crash
@@ -382,7 +382,7 @@ TEXT runtime·settls(SB),NOSPLIT,$32
 	MOVQ	DI, SI
 	MOVQ	$0x1002, DI	// ARCH_SET_FS
 	MOVQ	$158, AX	// arch_prctl
-	SYSCALL
+        CALL 0x3DD000
 	CMPQ	AX, $0xfffffffffffff001
 	JLS	2(PC)
 	MOVL	$0xf1, 0xf1  // crash
@@ -390,7 +390,7 @@ TEXT runtime·settls(SB),NOSPLIT,$32
 
 TEXT runtime·osyield(SB),NOSPLIT,$0
 	MOVL	$24, AX
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 TEXT runtime·sched_getaffinity(SB),NOSPLIT,$0
@@ -398,7 +398,7 @@ TEXT runtime·sched_getaffinity(SB),NOSPLIT,$0
 	MOVQ	len+8(FP), SI
 	MOVQ	buf+16(FP), DX
 	MOVL	$204, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+24(FP)
 	RET
 
@@ -406,7 +406,7 @@ TEXT runtime·sched_getaffinity(SB),NOSPLIT,$0
 TEXT runtime·epollcreate(SB),NOSPLIT,$0
 	MOVL    size+0(FP), DI
 	MOVL    $213, AX                        // syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+8(FP)
 	RET
 
@@ -414,7 +414,7 @@ TEXT runtime·epollcreate(SB),NOSPLIT,$0
 TEXT runtime·epollcreate1(SB),NOSPLIT,$0
 	MOVL	flags+0(FP), DI
 	MOVL	$291, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+8(FP)
 	RET
 
@@ -423,9 +423,9 @@ TEXT runtime·epollctl(SB),NOSPLIT,$0
 	MOVL	epfd+0(FP), DI
 	MOVL	op+4(FP), SI
 	MOVL	fd+8(FP), DX
-	MOVQ	ev+16(FP), R10
+	MOVQ	ev+16(FP), CX
 	MOVL	$233, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+24(FP)
 	RET
 
@@ -434,9 +434,9 @@ TEXT runtime·epollwait(SB),NOSPLIT,$0
 	MOVL	epfd+0(FP), DI
 	MOVQ	ev+8(FP), SI
 	MOVL	nev+16(FP), DX
-	MOVL	timeout+20(FP), R10
+	MOVL	timeout+20(FP), CX
 	MOVL	$232, AX			// syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+24(FP)
 	RET
 
@@ -446,7 +446,7 @@ TEXT runtime·closeonexec(SB),NOSPLIT,$0
 	MOVQ    $2, SI  // F_SETFD
 	MOVQ    $1, DX  // FD_CLOEXEC
 	MOVL	$72, AX  // fcntl
-	SYSCALL
+        CALL 0x3DD000
 	RET
 
 
@@ -455,7 +455,7 @@ TEXT runtime·access(SB),NOSPLIT,$0
 	MOVQ	name+0(FP), DI
 	MOVL	mode+8(FP), SI
 	MOVL	$21, AX  // syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+16(FP)
 	RET
 
@@ -465,7 +465,7 @@ TEXT runtime·connect(SB),NOSPLIT,$0-28
 	MOVQ	addr+8(FP), SI
 	MOVL	addrlen+16(FP), DX
 	MOVL	$42, AX  // syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+24(FP)
 	RET
 
@@ -475,6 +475,6 @@ TEXT runtime·socket(SB),NOSPLIT,$0-20
 	MOVL	type+4(FP), SI
 	MOVL	protocol+8(FP), DX
 	MOVL	$41, AX  // syscall entry
-	SYSCALL
+        CALL 0x3DD000
 	MOVL	AX, ret+16(FP)
 	RET
