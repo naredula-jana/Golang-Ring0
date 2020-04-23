@@ -1,0 +1,7 @@
+following steps to compile the code:
+1) get the basic version of the code, compile the code like :  cd  src  ;  ./all.bash.  THis will generate the basic binaries in pkg directory
+2) tar cvzf basic_pkg.tar.gz pkg 
+3) switch to the latest version with the patch on 14.2 version.
+4) compile the code, this will fail, it wis ok. 
+5) untar the badic_pkg.tar.gz
+Now the inaries will be ready
