@@ -33,5 +33,5 @@ Watch demo here: [Golang in  Ring-0](https://www.youtube.com/watch?v=ygGAUJeTv0w
 
 
 ## Papers:
- -   [Golang apps in ring-0](../master/doc/GolangAppInRing0.pdf).
+ -   [Golang apps in ring-0](https://github.com/naredula-jana/Jiny-Kernel/master/doc/GolangAppInRing0.pdf).
  
