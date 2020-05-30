@@ -19,7 +19,7 @@ The following are the changes required to run Golang-14.2 application in Ring-0:
 - **Jiny Kernel:** [Latest Jiny kernel support Golang 14.2](https://github.com/naredula-jana/Jiny-Kernel) 
 
 ## Running golang in Ring-0:
-Similar to insmod, insexe is tool used to insert the golang application in to jiny kernel. But only one application can run inside the ring-0 of kernel. more detail are (available here)[https://github.com/naredula-jana/Jiny-Kernel/blob/master/bin/README.md] 
+Similar to insmod, insexe is tool used to insert the golang application in to jiny kernel. But only one application can run inside the ring-0 of kernel. more detail are [available here](https://github.com/naredula-jana/Jiny-Kernel/blob/master/bin/README.md)
 Below are teo steps to run the application:
 - **Start Jiny platform :** run ./docker_run_hp 
 - **Load and run golang app in ring-0**: insexe golang-app-name arguments
@@ -28,10 +28,10 @@ Watch demo here: [Golang in  Ring-0](https://www.youtube.com/watch?v=ygGAUJeTv0w
 
 ## Performance Test results:
 
-[Golang application runs almost 2X to 10X faster on Jiny-Platform.](https://github.com/naredula-jana/Jiny-Kernel/master/doc/benchmarks.md).   
+[Golang application runs almost 2X to 10X faster on Jiny-Platform.](https://github.com/naredula-jana/Jiny-Kernel/blob/master/doc/benchmarks.md).   
 
 
 
 ## Papers:
- -   [Golang apps in ring-0](https://github.com/naredula-jana/Jiny-Kernel/master/doc/GolangAppInRing0.pdf).
+ -   [Golang apps in ring-0](https://github.com/naredula-jana/Jiny-Kernel/blob/master/doc/GolangAppInRing0.pdf).
  
