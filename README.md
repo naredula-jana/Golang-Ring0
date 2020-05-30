@@ -12,13 +12,13 @@
 - **Prioratizing Go routine:** Not yet implemented.
 - **Co-operative kernel for Go-lang Runtime system:** when compare to the generic purpose linux kernel with multiple appilication running at the same time, Jiny kernel is small and designed to run only one application at a time in Ring-0. so kernel functions like library to the go-lang runtime system.
 
-##Implementation details:
+## Implementation details:
 The following are the changes required to run Golang-14.2 application in Ring-0:
 
 - **Golang-14.2 changes:** [Patch to Golang-14.2](https://github.com/naredula-jana/Golang-Ring0/commit/f28f33636e253a59792495bc17727466ef819cf9)
 - **Jiny Kernel:** [Latest Jiny kernel support Golang 14.2](https://github.com/naredula-jana/Jiny-Kernel) 
 
-##Running golang in Ring-0:
+## Running golang in Ring-0:
 Similar to insmod, insexe is tool used to insert the golang application in to jiny kernel. But only one application can run inside the ring-0 of kernel. more detail are (available here)[https://github.com/naredula-jana/Jiny-Kernel/blob/master/bin/README.md] 
 Below are teo steps to run the application:
 - **Start Jiny platform :** run ./docker_run_hp 
